@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     VarOption: typeof import('@varlet/ui')['_OptionComponent']
     VarPopup: typeof import('@varlet/ui')['_PopupComponent']
     VarSelect: typeof import('@varlet/ui')['_SelectComponent']
+    VarUploader: typeof import('@varlet/ui')['_UploaderComponent']
   }
 }
 

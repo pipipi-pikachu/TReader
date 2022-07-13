@@ -59,9 +59,11 @@
       <div class="empty" v-else-if="!showTxtList.length">搜索结果为空 (⊙﹏⊙)</div>
     </div>
 
-    <var-button class="upload-btn" type="primary" round @click="upload()">
-      <var-icon name="plus" :size="28" />
-    </var-button>
+    <var-uploader accept="text/plain" @after-read="uploadFile">
+      <var-button class="upload-btn" type="primary" round>
+        <var-icon name="plus" :size="28" />
+      </var-button>
+    </var-uploader>
   </div>
 </template>
 
@@ -72,9 +74,8 @@ import db from '@/db'
 import { TXTItem, defaultSetting } from '@/types'
 
 import { OnLongPress } from '@vueuse/components'
-import { useFileSystemAccess } from '@vueuse/core'
 
-import { Dialog } from '@varlet/ui'
+import { Dialog, VarFile } from '@varlet/ui'
 import '@varlet/ui/es/dialog/style/index.js'
 
 const txtList = ref<TXTItem[]>([])
@@ -172,56 +173,50 @@ const showTxtList = computed(() => {
 })
 
 // 上传文件
-const { data: fileData, fileName, fileSize, open: openFileSelecter } = useFileSystemAccess({
-  dataType: 'ArrayBuffer',
-  types: [{
-    description: 'text',
-    accept: {
-      'text/plain': ['.txt'],
-    },
-  }],
-  excludeAcceptAllOption: true,
-})
+const uploadFile = async (e: VarFile) => {
+  const file = e.file
+  if (!file) return
 
-const upload = async () => {
-  await openFileSelecter()
+  const fileReader = new FileReader()
+  fileReader.readAsArrayBuffer(file)
+  fileReader.addEventListener('load', () => {
+    const fileData = fileReader.result as ArrayBuffer
 
-  if (!fileData.value) return
+    const encodings = ['utf-8', 'gbk', 'big5']
 
-  const encodings = ['utf-8', 'gbk', 'big5']
-
-  const decode = (encoding: string) => {
-    const decoder = new TextDecoder(encoding, { fatal: true })
-    try {
-      return decoder.decode(fileData.value)
-    } 
-    catch {
-      return null
+    const decode = (encoding: string) => {
+      const decoder = new TextDecoder(encoding, { fatal: true })
+      try {
+        return decoder.decode(fileData)
+      } 
+      catch {
+        return null
+      }
     }
-  }
 
-  let text = ''
-  for (const encoding of encodings) {
-    const ret = decode(encoding)
-    if (ret) {
-      text = ret
-      break
+    let text = ''
+    for (const encoding of encodings) {
+      const ret = decode(encoding)
+      if (ret) {
+        text = ret
+        break
+      }
     }
-  }
 
-  const newTXT = {
-    id: '' + new Date().getTime() + Math.floor(Math.random() * 1000000),
-    title: fileName.value,
-    createTime: new Date().getTime(),
-    accessTime: 0,
-    size: fileSize.value,
-    content: text,
-    progress: 0,
-    progressText: '',
-  }
-  
-  txtList.value.push(newTXT)
-  db.txtList.add(newTXT)
+    const newTXT = {
+      id: '' + new Date().getTime() + Math.floor(Math.random() * 1000000),
+      title: file.name,
+      createTime: new Date().getTime(),
+      accessTime: 0,
+      size: file.size,
+      content: text,
+      progress: 0,
+      progressText: '',
+    }
+    
+    txtList.value.push(newTXT)
+    db.txtList.add(newTXT)
+  })
 }
 
 // 文件大小单位转换
