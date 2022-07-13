@@ -5,7 +5,7 @@ import components from 'unplugin-vue-components/vite'
 import { VarletUIResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
-  base: '',
+  base: './',
   plugins: [
     vue(),
     components({
