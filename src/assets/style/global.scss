@@ -43,6 +43,7 @@ body {
   overflow: hidden;
   background-color: #fff;
   color: #333;
+  font-size: 13px;
 }
 
 ol,
@@ -80,11 +81,8 @@ a {
   background-color: #c1c1c1;
 }
 
-:root body {
-  --input-placeholder-size: 13px;
-  --font-size-md: 13px;
-
-  .var-action-sheet__action-item {
-    font-size: 13px;
-  }
+:root {
+  --color-primary: #41464b !important;
+  --font-size-md: 13px !important;
+  --input-placeholder-size: 13px !important;
 }

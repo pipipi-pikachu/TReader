@@ -75,8 +75,9 @@ import { TXTItem, defaultSetting } from '@/types'
 
 import { OnLongPress } from '@vueuse/components'
 
-import { Dialog, VarFile } from '@varlet/ui'
+import { Dialog, VarFile, Snackbar } from '@varlet/ui'
 import '@varlet/ui/es/dialog/style/index.js'
+import '@varlet/ui/es/snackbar/style/index.js'
 
 const txtList = ref<TXTItem[]>([])
 onMounted(() => {
@@ -176,6 +177,11 @@ const showTxtList = computed(() => {
 const uploadFile = async (e: VarFile) => {
   const file = e.file
   if (!file) return
+
+  if (file.type !== 'text/plain') {
+    Snackbar('不支持该文件类型！')
+    return
+  }
 
   const fileReader = new FileReader()
   fileReader.readAsArrayBuffer(file)

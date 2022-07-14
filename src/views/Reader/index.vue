@@ -1,6 +1,12 @@
 <template>
   <div class="reader" v-if="txt" :style="cssVar">
-    <div class="header" :class="{ 'show': showMenu }">
+    <div class="header" 
+      :class="{ 'show': showMenu }"
+      :style="{
+        color: setting.color,
+        backgroundColor: setting.background,
+      }"
+    >
       <span class="title">{{txt.title}}</span>
       <span class="progress">{{(progress * 100).toFixed(2)}}%</span>
     </div>
@@ -18,7 +24,13 @@
       }"
     ></div>
 
-    <div class="menu" :class="{ 'show': showMenu }">
+    <div class="menu" 
+      :class="{ 'show': showMenu }"
+      :style="{
+        color: setting.color,
+        backgroundColor: setting.background,
+      }"
+    >
       <div class="menu-item" @click="router.push('/')"><var-icon name="chevron-left" /> <span>返回</span></div>
       <div class="menu-item" @click="openBookmarkMenu()"><var-icon name="star-outline" /> <span>书签</span></div>
       <div class="menu-item" @click="utilPanelShowType = 'search'"><var-icon name="magnify" /> <span>查找</span></div>
@@ -127,7 +139,7 @@ const parseTextContent = (text: string) => {
 const getCurrentParagraphsData = () => {
   const progressNum = progress.value * contentLength.value
 
-  const length = 5000
+  const length = 8000
   const start = progressNum - length < 0 ? 0 : progressNum - length
   const end = progressNum + length
 
@@ -406,8 +418,8 @@ const addBookmark = () => {
   flex-direction: column;
 
   .util-panel-header {
-    height: 36px;
-    background-color: #333;
+    height: 40px;
+    background-color: #41464b;
     color: #fff;
     padding: 0 5px;
     flex-shrink: 0;
