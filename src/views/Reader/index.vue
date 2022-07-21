@@ -348,7 +348,7 @@ const addBookmark = () => {
 .content {
   height: 100%;
   overflow: auto;
-  padding: 12px;
+  padding: 0 12px;
 }
 .header {
   height: 30px;

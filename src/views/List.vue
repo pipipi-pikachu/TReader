@@ -204,7 +204,7 @@ const uploadFile = async (e: VarFile) => {
     for (const encoding of encodings) {
       const ret = decode(encoding)
       if (ret) {
-        text = ret
+        text = ret.replace(/(<([^>]+)>)/g, '')
         break
       }
     }
