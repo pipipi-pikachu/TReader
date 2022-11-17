@@ -139,7 +139,7 @@ const parseTextContent = (text: string) => {
 const getCurrentParagraphsData = () => {
   const progressNum = progress.value * contentLength.value
 
-  const length = 8000
+  const length = 10000
   const start = progressNum - length < 0 ? 0 : progressNum - length
   const end = progressNum + length
 
@@ -349,6 +349,10 @@ const addBookmark = () => {
   height: 100%;
   overflow: auto;
   padding: 0 12px;
+
+  ::v-deep(p) {
+    content-visibility: auto;
+  }
 }
 .header {
   height: 30px;
@@ -356,6 +360,7 @@ const addBookmark = () => {
   top: -30px;
   left: 0;
   right: 0;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -414,6 +419,7 @@ const addBookmark = () => {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 100;
   display: flex;
   flex-direction: column;
 
